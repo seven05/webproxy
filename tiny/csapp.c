@@ -32,7 +32,8 @@
 void unix_error(char *msg) /* Unix-style error */
 {
     fprintf(stderr, "%s: %s\n", msg, strerror(errno));
-    exit(0);
+    if(strcmp("Broken pipe",strerror(errno)))
+        exit(0);
 }
 /* $end unixerror */
 
