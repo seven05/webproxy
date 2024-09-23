@@ -17,7 +17,7 @@
 
 4. 기본 과제 파일과 달라진 파일들 정의
 
-- proxy.c: 새로 만든 drvier_new2.sh 까지 전부 만족하는 최종 프록시 코드
+- proxy.c: 새로 만든 drvier_new2.sh 까지 통과해보려고한 코드 (멀티쓰레드 안정성이 pthread_mutex만으로는 확보되지못했음)
 - proxy_sequencial.c: Sequencial만 구현한 기본 proxy 코드
 - proxy_concurrency.c: Sequencial 코드에서 멀티쓰레드를 추가한 코드
 - proxy_cache.c: Concurrency 코드에서 이중 연결리스트를 사용해서 캐시까지 구현한 코드
