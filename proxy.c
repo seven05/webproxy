@@ -4,7 +4,7 @@
 
 /* Recommended max cache and object sizes */
 #define MAX_CACHE_SIZE 1049000
-#define MAX_OBJECT_SIZE 102400
+#define MAX_OBJECT_SIZE 104900
 
 /* You won't lose style points for including this long line in your code */
 static const char *user_agent_hdr =

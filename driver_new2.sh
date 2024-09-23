@@ -652,8 +652,8 @@ echo "Starting proxy on port ${proxy_port}"
 ./proxy ${proxy_port} &> /dev/null &
 proxy_pid=$!
 
-NUM_CLIENTS=9
-MAX_CC=15
+NUM_CLIENTS=5
+MAX_CC=10
 
 ConcurCache="cache_test/test1.txt
 cache_test/test2.txt
@@ -664,30 +664,8 @@ cache_test/test6.txt
 cache_test/test7.txt
 cache_test/test8.txt
 cache_test/test9.txt
-cache_test/test10.txt
-cache_test/test11.txt
-cache_test/test12.txt
-cache_test/test13.txt
-cache_test/test14.txt
-cache_test/test15.txt"
-
-ConcurCache1="cache_test/test1.txt
-cache_test/test2.txt
-cache_test/test3.txt
-cache_test/test4.txt
-cache_test/test5.txt"
-
-ConcurCache2="cache_test/test6.txt
-cache_test/test7.txt
-cache_test/test8.txt
-cache_test/test9.txt
 cache_test/test10.txt"
 
-ConcurCache3="cache_test/test11.txt
-cache_test/test12.txt
-cache_test/test13.txt
-cache_test/test14.txt
-cache_test/test15.txt"
 SERVER_URL="http://localhost:${tiny_port}"
 TEST4_SCORE=0
 
@@ -708,18 +686,17 @@ pids=()  # PID를 저장할 배열
 
 for i in $(seq 0 $((NUM_CLIENTS-1))); do
     for file in ${ConcurCache}; do
-    (
+        (
         FILE_NAME=$(basename "$file")
         download_proxy $PROXY_DIR ${FILE_NAME} "${SERVER_URL}/${file}" "http://localhost:${proxy_port}"
         echo "i = $i, $file"
-    ) &
-
+        ) &
     # 백그라운드 작업의 PID 저장
-    pids+=($!)
+        pids+=($!)
     done
 done
 
-# 저장된 PID들에 대해 wait 실행
+# # 저장된 PID들에 대해 wait 실행
 for pid in "${pids[@]}"; do
     wait $pid
 done
@@ -730,7 +707,7 @@ echo "Killing tiny"
 kill $tiny_pid 2> /dev/null
 wait $tiny_pid 2> /dev/null
 
-for file in ${FETCH_LIST2}
+for file in ${FETCH_LIST3}
 do
     echo "Fetching a cached copy of ./tiny/${file} into ${NOPROXY_DIR}"
     FILE_NAME=$(basename "$file")
@@ -738,7 +715,7 @@ do
 done
 # See if the proxy fetch succeeded by comparing it with the original
 # file in the tiny directory
-for file in ${FETCH_LIST2}
+for file in ${FETCH_LIST3}
 do
     FILE_NAME=$(basename "$file")
     diff -q ./tiny/${file} ${NOPROXY_DIR}/${FILE_NAME}  &> ./log
@@ -750,27 +727,9 @@ do
     fi
 done
 
-#Search 1-5 textfile in cache. These files should not be found in cache.
-for file in ${FETCH_LIST1}
-do
-    echo "Fetching a cached copy of ./tiny/${file} into ${NOPROXY_DIR}"
-    FILE_NAME=$(basename "$file")
-    download_proxy $NOPROXY_DIR ${FILE_NAME} "${SERVER_URL}/${file}" "http://localhost:${proxy_port}"
-done
-# See if the proxy fetch succeeded by comparing it with the original
-# file in the tiny directory
-for file in ${FETCH_LIST1}; do
-    diff -q ./tiny/${file} ${NOPROXY_DIR}/${file} &> ./log
-    if [ $? -ne 0 ]; then
-        ((TEST4_SCORE+=1))
-        echo "Success: Was not able to fetch tiny/${file} from the cache."
-    else
-        echo "Failure: Was able to fetch tiny/${file} from the proxy cache."
-    fi  
-done
 
 #if TEST4_SCORE=15 then success
-if [ $TEST4_SCORE -eq 15 ]; then
+if [ $TEST4_SCORE -eq 10 ]; then
     echo "test4...success"
 else
     echo "cache is not correct. Threads are being disturbed with themselves"

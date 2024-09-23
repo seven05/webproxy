@@ -3,7 +3,7 @@
 #include "csapp.h"
 
 #define MAX_CACHE_SIZE 1049000
-#define MAX_OBJECT_SIZE 102400
+#define MAX_OBJECT_SIZE 104900
 
 typedef struct web_obj_t
 {

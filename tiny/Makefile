@@ -17,6 +17,6 @@ cgi:
 	(cd cgi-bin; make)
 
 clean:
-	rm -f *.o tiny *~
+	rm -f *.o tiny *~ *.log
 	(cd cgi-bin; make clean)
 
