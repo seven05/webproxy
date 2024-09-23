@@ -15,7 +15,6 @@ void clienterror(int fd, char *cause, char *errnum,
 
 int main(int argc, char **argv)
 {
-  // signal(SIGPIPE, SIG_IGN);
   int listenfd, connfd;
   char hostname[MAXLINE], port[MAXLINE];
   socklen_t clientlen;
@@ -25,7 +24,7 @@ int main(int argc, char **argv)
     fprintf(stderr, "usage: %s <port>\n", argv[0]);
     exit(1);
   }
-
+  signal(SIGPIPE, SIG_IGN);
   listenfd = Open_listenfd(argv[1]);
   while (1) {
     clientlen = sizeof(clientaddr);
@@ -43,7 +42,7 @@ int main(int argc, char **argv)
  */
 void doit(int fd)
 {
-  signal(SIGPIPE, SIG_IGN);
+  // signal(SIGPIPE, SIG_IGN);
   int is_static;
   struct stat sbuf;
   char buf[MAXLINE], method[MAXLINE], uri[MAXLINE], version[MAXLINE];
@@ -158,7 +157,7 @@ void serve_static(int fd, char *filename, int filesize, char *method)
   srcp = (char*)Malloc(filesize);
   Rio_readn(srcfd, srcp, filesize);
   Close(srcfd);                           
-  Rio_writen(fd, srcp, filesize);         
+  rio_writen(fd, srcp, filesize);         // SiGPIPE 에러가 뜨더라도 unixerror로 서버가 종료되는것을 막으려고 rio_writen으로 바꿈
   free(srcp);                
 }
 
