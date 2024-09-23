@@ -22,3 +22,4 @@ void add_cache(web_obj_t *web_object);
 extern web_obj_t *rootp;  
 extern web_obj_t *lastp;  
 extern int total_cache_size; 
+extern pthread_mutex_t cache_mutex;

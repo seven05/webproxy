@@ -21,8 +21,6 @@ int main(int argc, char **argv) {
   pthread_t tid;
   rootp = (web_obj_t *)calloc(1, sizeof(web_obj_t));
   lastp = (web_obj_t *)calloc(1, sizeof(web_obj_t));
-  pthread_mutex_init(&cache_mutex, NULL);  // 기본 속성으로 뮤텍스 초기화
-
   if (argc != 2) {
     fprintf(stderr, "usage: %s <port>\n", argv[0]);
     exit(1);
@@ -79,15 +77,13 @@ void doit(int fd){
     }
   }
 
-  pthread_mutex_lock(&cache_mutex);  // 캐시에 접근하기 전에 잠금
   web_obj_t *request_cache = find_cache(file_uri);
   if(request_cache){
     send_cache(request_cache,fd);
     use_cache(request_cache);
-    pthread_mutex_unlock(&cache_mutex);    
     return;
   }
-  pthread_mutex_unlock(&cache_mutex);
+
   // printf("Host: %s\n", host);
   // printf("Port: %s\n", port);
   // printf("File URI: %s\n", file_uri);
@@ -147,9 +143,7 @@ void doit(int fd){
     web_object->content_length = filesize;
     strcpy(web_object->file_uri, file_uri);                                 
     strcpy(web_object->header,tmp2);
-    pthread_mutex_lock(&cache_mutex);  // 캐시에 접근하기 전에 잠금
     add_cache(web_object);
-    pthread_mutex_unlock(&cache_mutex);
   }
   else{
     free(filep);
