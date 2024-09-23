@@ -14,3 +14,13 @@
 - LRU 정책을 지켜서 캐시를 저장하고있는지 체크
 - 100KB가 넘는 웹 객체를 잘 처리하는지 체크
 - 캐시가 멀트쓰레드 안정성을 보장하는지 체크
+
+4. 기본 과제 파일과 달라진 파일들 정의
+
+- proxy.c: 새로 만든 drvier_new2.sh 까지 전부 만족하는 최종 프록시 코드
+- proxy_sequencial.c: Sequencial만 구현한 기본 proxy 코드
+- proxy_concurrency.c: Sequencial 코드에서 멀티쓰레드를 추가한 코드
+- proxy_cache.c: Concurrency 코드에서 이중 연결리스트를 사용해서 캐시까지 구현한 코드
+- driver.sh: cmu 기본 과제에서 제공하는 기본테스트 sh파일
+- driver_new2.sh: 위에서 언급한 여러가지 테스트를 직접 추가한 sh파일
+- tiny/cache_test 폴더: driver_new2.sh 에서 실행하는 추가적인 테스트 코드들을 위한 tiny 서버 데이터
